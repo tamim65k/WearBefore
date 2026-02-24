@@ -61,90 +61,68 @@ export default function VirtualTryOnPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
-      <div className="text-center mb-12">
-        <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full mb-4">
-          <Sparkles className="w-5 h-5" />
-          <span className="font-semibold">AI-Powered Technology</span>
-        </div>
-        <h1 className="text-4xl font-bold mb-4">Virtual Try-On</h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          See how our products look on you before you buy. Upload your photo and
-          select a product to get started.
-        </p>
-      </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-        {/* Upload Section */}
-        <div>
-          <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
-            <h2 className="text-xl font-bold mb-4">
-              Step 1: Upload Your Photo
-            </h2>
-            {!uploadedImage ? (
-              <div
-                onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center cursor-pointer hover:border-black transition-colors"
-              >
+        {/* LEFT: Header info + disabled steps */}
+        <div className="space-y-6">
+          {/* Header block */}
+          <div>
+            <div className="inline-flex items-center space-x-1.5 bg-gradient-to-r from-violet-700 to-indigo-600 text-white px-3 py-1 rounded-full mb-3 text-xs font-semibold">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>AI-Powered Technology</span>
+            </div>
+            <h1 className="text-3xl font-bold mb-2 leading-tight">
+              Virtual Try-On
+            </h1>
+            <p className="text-sm text-gray-500 max-w-sm leading-relaxed">
+              See how our products look on you before you buy. Upload your photo
+              and select a product to get started.
+            </p>
+          </div>
+
+          {/* Step 1 – disabled */}
+          <div className="relative">
+            <div className="bg-white p-6 rounded-lg shadow-sm opacity-50 pointer-events-none select-none">
+              <h2 className="text-xl font-bold mb-4">
+                Step 1: Upload Your Photo
+              </h2>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
                 <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                 <p className="text-gray-600 mb-2">Click to upload your photo</p>
                 <p className="text-sm text-gray-500">PNG, JPG up to 10MB</p>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                />
               </div>
-            ) : (
-              <div className="relative">
-                <div className="relative aspect-square rounded-lg overflow-hidden">
-                  <Image
-                    src={uploadedImage}
-                    alt="Uploaded"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <button
-                  onClick={handleReset}
-                  className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-gray-100"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-            )}
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center rounded-lg">
+              <span className="bg-gray-900/80 text-white text-sm font-semibold px-4 py-1.5 rounded-full backdrop-blur-sm">
+                Coming Soon
+              </span>
+            </div>
           </div>
 
-          {/* Product Selection */}
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <h2 className="text-xl font-bold mb-4">Step 2: Select Product</h2>
-            <div className="grid grid-cols-2 gap-4 max-h-96 overflow-y-auto">
-              {sneakersAndShoes.map((product) => (
-                <button
-                  key={product.id}
-                  onClick={() => setSelectedProduct(product)}
-                  className={`text-left border-2 rounded-lg p-3 transition-all ${
-                    selectedProduct?.id === product.id
-                      ? "border-black bg-gray-50"
-                      : "border-gray-200 hover:border-gray-300"
-                  }`}
-                >
-                  <div className="relative aspect-square mb-2 rounded overflow-hidden">
-                    <Image
-                      src={product.images[0]}
-                      alt={product.name}
-                      fill
-                      className="object-cover"
-                    />
+          {/* Step 2 – disabled */}
+          <div className="relative">
+            <div className="bg-white p-6 rounded-lg shadow-sm opacity-50 pointer-events-none select-none">
+              <h2 className="text-xl font-bold mb-4">Step 2: Select Product</h2>
+              <div className="grid grid-cols-2 gap-4 max-h-48 overflow-hidden">
+                {sneakersAndShoes.slice(0, 4).map((product) => (
+                  <div
+                    key={product.id}
+                    className="text-left border-2 border-gray-200 rounded-lg p-3"
+                  >
+                    <div className="relative aspect-square mb-2 rounded overflow-hidden bg-gray-100" />
+                    <p className="font-medium text-sm truncate">
+                      {product.name}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      ${product.price.toFixed(2)}
+                    </p>
                   </div>
-                  <p className="font-medium text-sm truncate">{product.name}</p>
-                  <p className="text-sm text-gray-600">
-                    ${product.price.toFixed(2)}
-                  </p>
-                </button>
-              ))}
+                ))}
+              </div>
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center rounded-lg">
+              <span className="bg-gray-900/80 text-white text-sm font-semibold px-4 py-1.5 rounded-full backdrop-blur-sm">
+                Coming Soon
+              </span>
             </div>
           </div>
         </div>
@@ -154,7 +132,7 @@ export default function VirtualTryOnPage() {
           <div className="bg-white p-6 rounded-lg shadow-sm sticky top-24">
             <h2 className="text-xl font-bold mb-4">Preview</h2>
             {!uploadedImage || !selectedProduct ? (
-              <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg overflow-hidden relative">
+              <div className="aspect-square bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden relative shadow-xl">
                 <ModelViewer />
               </div>
             ) : showResult ? (

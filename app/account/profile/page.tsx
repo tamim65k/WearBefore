@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/store/authStore';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { User, Mail, Phone, MapPin, Calendar } from 'lucide-react';
 
 export default function ProfilePage() {
     const router = useRouter();
-    const { isAuthenticated, user, updateProfile } = useAuthStore();
+    const { user, isLoading } = useUser();
+    const isAuthenticated = Boolean(user);
 
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
@@ -20,14 +21,23 @@ export default function ProfilePage() {
     });
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (user) {
+            setFormData((current) => ({
+                ...current,
+                name: user.name || '',
+                email: user.email || '',
+            }));
+        }
+    }, [user]);
+
+    useEffect(() => {
+        if (!isLoading && !isAuthenticated) {
             router.push('/auth/login');
         }
-    }, [isAuthenticated, router]);
+    }, [isLoading, isAuthenticated, router]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        updateProfile({ name: formData.name, email: formData.email });
         setIsEditing(false);
     };
 

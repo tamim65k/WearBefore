@@ -1,18 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Image from "next/image";
-import { getProductById } from "@/data/products";
 import { useCartStore } from "@/store/cartStore";
 import { ArrowLeft, Star, Truck, Shield, Heart, Check } from "lucide-react";
 import Link from "next/link";
+import { Product } from "@/types";
 
 export default function ProductDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const productId = params.id as string;
-  const product = getProductById(productId);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [isLoadingProduct, setIsLoadingProduct] = useState(true);
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
@@ -22,6 +22,39 @@ export default function ProductDetailPage() {
   const [addedToCart, setAddedToCart] = useState(false);
 
   const addItem = useCartStore((state) => state.addItem);
+
+  useEffect(() => {
+    const loadProduct = async () => {
+      setIsLoadingProduct(true);
+
+      try {
+        const response = await fetch(`/api/products/${encodeURIComponent(productId)}`, {
+          cache: "no-store",
+        });
+        const payload = (await response.json()) as { product?: Product };
+
+        if (response.ok && payload.product) {
+          setProduct(payload.product);
+        } else {
+          setProduct(null);
+        }
+      } finally {
+        setIsLoadingProduct(false);
+      }
+    };
+
+    if (productId) {
+      void loadProduct();
+    }
+  }, [productId]);
+
+  if (isLoadingProduct) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-16 text-center">
+        <p className="text-gray-500">Loading product...</p>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -267,10 +300,10 @@ export default function ProductDetailPage() {
               </button>
 
               <Link
-                href="/virtual-tryon"
+                href="/ai-trial"
                 className="w-full py-3 text-center rounded-xl text-sm font-semibold border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition-all"
               >
-                Try with AI Virtual Try-On
+                Try with AI Trial
               </Link>
             </div>
 

@@ -108,7 +108,7 @@ WearBefore/
 │   ├── 📂 contact/           # Contact page with team info
 │   ├── 📂 products/          # Product catalog & details
 │   ├── 📂 category/          # Product categories
-│   ├── 📂 virtual-tryon/     # AI virtual try-on
+│   ├── 📂 ai-trial/          # Conversational AI trial
 │   └── 📂 ...               # Other pages (FAQ, shipping, etc.)
 ├── 📂 components/            # Reusable React components
 │   ├── 📂 layout/           # Header, Footer components
@@ -412,7 +412,7 @@ project werebefore/
 │   ├── products/                # Product catalog
 │   │   ├── [category]/         # Category pages
 │   │   └── [id]/               # Product detail pages
-│   ├── virtual-tryon/          # AI virtual try-on
+│   ├── ai-trial/               # Conversational AI trial
 │   ├── order-confirmation/     # Order success page
 │   ├── layout.tsx              # Root layout
 │   ├── page.tsx                # Homepage

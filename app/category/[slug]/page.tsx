@@ -1,15 +1,40 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { getProductsByCategory } from '@/data/products';
 import ProductCard from '@/components/products/ProductCard';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { Product } from '@/types';
 
 export default function CategoryPage() {
     const params = useParams();
     const category = params.slug as string;
-    const products = getProductsByCategory(category);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadCategoryProducts = async () => {
+            setLoading(true);
+
+            try {
+                const response = await fetch(`/api/products?category=${encodeURIComponent(category)}`, {
+                    cache: 'no-store',
+                });
+                const payload = (await response.json()) as { products?: Product[] };
+
+                if (response.ok) {
+                    setProducts(payload.products || []);
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (category) {
+            void loadCategoryProducts();
+        }
+    }, [category]);
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -26,7 +51,11 @@ export default function CategoryPage() {
                 <p className="text-gray-600">{products.length} products available</p>
             </div>
 
-            {products.length === 0 ? (
+            {loading ? (
+                <div className="text-center py-12">
+                    <p className="text-gray-500 text-lg">Loading category products...</p>
+                </div>
+            ) : products.length === 0 ? (
                 <div className="text-center py-12">
                     <p className="text-gray-500 text-lg">No products found in this category</p>
                 </div>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import { Auth0Provider } from "@auth0/nextjs-auth0/client";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import SiteShell from "@/components/layout/SiteShell";
 
 export const metadata: Metadata = {
     title: "WereBefore - Fashion E-Commerce",
@@ -16,11 +16,9 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className="antialiased" suppressHydrationWarning>
-                <Header />
-                <main className="min-h-screen">
-                    {children}
-                </main>
-                <Footer />
+                <Auth0Provider>
+                    <SiteShell>{children}</SiteShell>
+                </Auth0Provider>
             </body>
         </html>
     );

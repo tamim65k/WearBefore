@@ -10,6 +10,7 @@ export interface Product {
     colors: string[];
     inStock: boolean;
     featured?: boolean;
+    isNewArrival?: boolean;
     rating?: number;
     reviews?: number;
 }

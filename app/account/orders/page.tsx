@@ -1,44 +1,82 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/store/authStore';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { Package, Truck, CheckCircle, XCircle } from 'lucide-react';
+
+interface AccountOrderItem {
+    productId: string;
+    productName: string;
+    unitPrice: number;
+    quantity: number;
+    selectedSize: string;
+    selectedColor: string;
+}
+
+interface AccountOrder {
+    id: string;
+    status: string;
+    subtotal: number;
+    shippingAmount: number;
+    taxAmount: number;
+    totalAmount: number;
+    createdAt: string;
+    items: AccountOrderItem[];
+}
 
 export default function OrdersPage() {
     const router = useRouter();
-    const { isAuthenticated } = useAuthStore();
+    const { user, isLoading } = useUser();
+    const isAuthenticated = Boolean(user);
+
+    const [orders, setOrders] = useState<AccountOrder[]>([]);
+    const [loadingOrders, setLoadingOrders] = useState(true);
 
     useEffect(() => {
         if (!isAuthenticated) {
+            setOrders([]);
+            return;
+        }
+
+        const loadOrders = async () => {
+            setLoadingOrders(true);
+
+            try {
+                const response = await fetch('/api/orders', { cache: 'no-store' });
+                const payload = (await response.json()) as { orders?: AccountOrder[]; error?: string };
+
+                if (!response.ok) {
+                    throw new Error(payload.error || 'Failed to load orders.');
+                }
+
+                setOrders(payload.orders || []);
+            } catch {
+                setOrders([]);
+            } finally {
+                setLoadingOrders(false);
+            }
+        };
+
+        void loadOrders();
+    }, [isAuthenticated]);
+
+    useEffect(() => {
+        if (!isLoading && !isAuthenticated) {
             router.push('/auth/login');
         }
-    }, [isAuthenticated, router]);
+    }, [isLoading, isAuthenticated, router]);
 
-    // Demo orders
-    const orders = [
-        {
-            id: 'WB-ABC123',
-            date: '2026-01-28',
-            total: 259.98,
-            status: 'delivered',
-            items: 2,
-        },
-        {
-            id: 'WB-DEF456',
-            date: '2026-01-25',
-            total: 129.99,
-            status: 'shipped',
-            items: 1,
-        },
-        {
-            id: 'WB-GHI789',
-            date: '2026-01-20',
-            total: 549.97,
-            status: 'processing',
-            items: 3,
-        },
-    ];
+    const normalizedOrders = useMemo(
+        () =>
+            orders.map((order) => ({
+                ...order,
+                date: order.createdAt,
+                total: order.totalAmount,
+                itemCount: order.items.reduce((sum, item) => sum + item.quantity, 0),
+            })),
+        [orders],
+    );
 
     const getStatusIcon = (status: string) => {
         switch (status) {
@@ -74,8 +112,18 @@ export default function OrdersPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <h1 className="text-3xl font-bold mb-8">My Orders</h1>
 
+            {loadingOrders ? (
+                <div className="bg-white p-8 rounded-lg shadow-sm text-center text-gray-500">
+                    Loading order history...
+                </div>
+            ) : normalizedOrders.length === 0 ? (
+                <div className="bg-white p-8 rounded-lg shadow-sm text-center">
+                    <Package className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                    <p className="text-gray-600">No orders found yet.</p>
+                </div>
+            ) : (
             <div className="space-y-4">
-                {orders.map((order) => (
+                {normalizedOrders.map((order) => (
                     <div key={order.id} className="bg-white p-6 rounded-lg shadow-sm">
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
                             <div>
@@ -97,7 +145,7 @@ export default function OrdersPage() {
                         </div>
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between pt-4 border-t">
                             <div className="text-sm text-gray-600 mb-2 md:mb-0">
-                                {order.items} item{order.items > 1 ? 's' : ''} • Total: <span className="font-semibold text-black">${order.total.toFixed(2)}</span>
+                                {order.itemCount} item{order.itemCount > 1 ? 's' : ''} • Total: <span className="font-semibold text-black">${order.total.toFixed(2)}</span>
                             </div>
                             <div className="flex space-x-3">
                                 <button className="text-sm text-black hover:underline font-medium">
@@ -118,6 +166,7 @@ export default function OrdersPage() {
                     </div>
                 ))}
             </div>
+            )}
         </div>
     );
 }

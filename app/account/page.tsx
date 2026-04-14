@@ -3,23 +3,19 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAuthStore } from '@/store/authStore';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { User, Package, Heart, Settings, LogOut } from 'lucide-react';
 
 export default function AccountPage() {
     const router = useRouter();
-    const { isAuthenticated, user, logout } = useAuthStore();
+    const { user, isLoading } = useUser();
+    const isAuthenticated = Boolean(user);
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!isLoading && !isAuthenticated) {
             router.push('/auth/login');
         }
-    }, [isAuthenticated, router]);
-
-    const handleLogout = () => {
-        logout();
-        router.push('/');
-    };
+    }, [isLoading, isAuthenticated, router]);
 
     if (!isAuthenticated || !user) {
         return null;
@@ -58,13 +54,13 @@ export default function AccountPage() {
                                     <span>{item.label}</span>
                                 </Link>
                             ))}
-                            <button
-                                onClick={handleLogout}
+                            <Link
+                                href="/auth/logout"
                                 className="w-full flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
                             >
                                 <LogOut className="w-5 h-5" />
                                 <span>Logout</span>
-                            </button>
+                            </Link>
                         </nav>
                     </div>
                 </div>

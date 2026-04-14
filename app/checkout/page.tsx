@@ -3,14 +3,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/store/cartStore';
-import { useAuthStore } from '@/store/authStore';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import Image from 'next/image';
 import { CreditCard, Lock } from 'lucide-react';
 
 export default function CheckoutPage() {
     const router = useRouter();
-    const { items, getTotalPrice, clearCart } = useCartStore();
-    const { isAuthenticated, user } = useAuthStore();
+    const { items, getTotalPrice, clearCart, loadFromServer } = useCartStore();
+    const { user, isLoading: authLoading } = useUser();
+    const isAuthenticated = Boolean(user);
     const totalPrice = getTotalPrice();
 
     const [formData, setFormData] = useState({
@@ -32,18 +33,64 @@ export default function CheckoutPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!isAuthenticated) {
+            router.push('/auth/login');
+            return;
+        }
+
         setIsProcessing(true);
 
-        // Simulate payment processing
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        try {
+            const response = await fetch('/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    shippingAddress: {
+                        fullName: formData.fullName,
+                        email: formData.email,
+                        phone: formData.phone,
+                        address: formData.address,
+                        city: formData.city,
+                        state: formData.state,
+                        zipCode: formData.zipCode,
+                        country: formData.country,
+                    },
+                }),
+            });
 
-        clearCart();
-        router.push('/order-confirmation');
+            const payload = (await response.json()) as { orderId?: string; error?: string };
+
+            if (!response.ok || !payload.orderId) {
+                throw new Error(payload.error || 'Failed to place order.');
+            }
+
+            clearCart();
+            await loadFromServer();
+            router.push(`/order-confirmation?orderId=${encodeURIComponent(payload.orderId)}`);
+        } catch (error) {
+            alert(error instanceof Error ? error.message : 'Checkout failed.');
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
+
+    if (authLoading) {
+        return null;
+    }
+
+    if (!isAuthenticated) {
+        if (typeof window !== 'undefined') {
+            router.push('/auth/login');
+        }
+        return null;
+    }
 
     if (items.length === 0) {
         if (typeof window !== 'undefined') {

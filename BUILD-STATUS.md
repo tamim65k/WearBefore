@@ -23,7 +23,7 @@ Your WereBefore E-Commerce project has been successfully built and is ready for 
 ✅ Order Confirmation
 ✅ Authentication (Login/Register)
 ✅ User Account Dashboard
-✅ Virtual Try-On (/virtual-tryon)
+✅ AI Trial (/ai-trial)
 ✅ Contact Us (/contact)
 ✅ Shipping Info
 ✅ Returns Policy

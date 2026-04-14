@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useMemo, Suspense } from "react";
+import { useState, useMemo, Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { products } from "@/data/products";
 import ProductCard from "@/components/products/ProductCard";
 import { SlidersHorizontal } from "lucide-react";
+import { Product } from "@/types";
 
 function ProductsContent() {
   const searchParams = useSearchParams();
@@ -14,11 +14,32 @@ function ProductsContent() {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const [sortBy, setSortBy] = useState<string>("name");
   const [showFilters, setShowFilters] = useState(false);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      setIsLoadingProducts(true);
+
+      try {
+        const response = await fetch("/api/products", { cache: "no-store" });
+        const payload = (await response.json()) as { products?: Product[] };
+
+        if (response.ok && Array.isArray(payload.products)) {
+          setAllProducts(payload.products);
+        }
+      } finally {
+        setIsLoadingProducts(false);
+      }
+    };
+
+    void loadProducts();
+  }, []);
 
   const categories = ["sneakers", "watches", "shirts", "pants", "accessories"];
 
   const filteredProducts = useMemo(() => {
-    let filtered = [...products];
+    let filtered = [...allProducts];
 
     // Search filter
     if (searchQuery) {
@@ -56,7 +77,7 @@ function ProductsContent() {
     });
 
     return filtered;
-  }, [searchQuery, selectedCategories, priceRange, sortBy]);
+  }, [allProducts, searchQuery, selectedCategories, priceRange, sortBy]);
 
   const toggleCategory = (category: string) => {
     setSelectedCategories((prev) =>
@@ -195,7 +216,11 @@ function ProductsContent() {
 
           {/* Products Grid */}
           <div className="flex-1 min-w-0">
-            {filteredProducts.length === 0 ? (
+            {isLoadingProducts ? (
+              <div className="text-center py-20">
+                <p className="text-gray-400 text-lg mb-3">Loading products...</p>
+              </div>
+            ) : filteredProducts.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-gray-400 text-lg mb-3">No products found</p>
                 <button

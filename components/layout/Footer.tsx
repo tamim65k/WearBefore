@@ -94,16 +94,16 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* AI Try-On CTA */}
+          {/* AI Trial CTA */}
           <div>
             <h4 className="text-white text-xs font-semibold uppercase tracking-widest mb-2">
-              AI Try-On
+              AI Trial
             </h4>
             <p className="text-xs mb-2 leading-relaxed">
-              See how clothes look on you before buying.
+              Chat with an AI stylist before buying.
             </p>
             <Link
-              href="/virtual-tryon"
+              href="/ai-trial"
               className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg
                                 bg-gradient-to-r from-violet-600 to-blue-500 text-white
                                 hover:from-violet-500 hover:to-blue-400 transition-all"

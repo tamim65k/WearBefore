@@ -8,11 +8,11 @@ import {
   Truck,
   Zap,
 } from "lucide-react";
-import { getFeaturedProducts } from "@/data/products";
+import { getFeaturedCatalogProducts } from "@/lib/catalog";
 import ProductCard from "@/components/products/ProductCard";
 
-export default function Home() {
-  const featuredProducts = getFeaturedProducts();
+export default async function Home() {
+  const featuredProducts = await getFeaturedCatalogProducts();
 
   return (
     <div>
@@ -50,10 +50,10 @@ export default function Home() {
                   Shop Now <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
-                  href="/virtual-tryon"
+                  href="/ai-trial"
                   className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-2.5 rounded-full hover:bg-white/10 transition-all font-semibold text-sm"
                 >
-                  <Zap className="w-4 h-4" /> AI Try-On
+                  <Zap className="w-4 h-4" /> AI Trial
                 </Link>
               </div>
             </div>

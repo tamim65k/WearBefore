@@ -2,23 +2,34 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { ShoppingCart, Search, Menu, X, User, Heart, Zap } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
-import { useAuthStore } from "@/store/authStore";
 import CartSidebar from "../cart/CartSidebar";
 
 export default function Header() {
+  const pathname = usePathname();
+  const { user, isLoading: authLoading } = useUser();
+  const isAiTrialRoute = pathname === "/ai-trial";
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showBanner, setShowBanner] = useState(true);
+  const [showBanner, setShowBanner] = useState(!isAiTrialRoute);
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
+    if (isAiTrialRoute) {
+      setShowBanner(false);
+      return;
+    }
+
+    setShowBanner(true);
     const timer = setTimeout(() => setShowBanner(false), 10000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [isAiTrialRoute]);
 
   useEffect(() => {
     setMounted(true);
@@ -31,7 +42,16 @@ export default function Header() {
   }, []);
 
   const getTotalItems = useCartStore((state) => state.getTotalItems);
-  const { isAuthenticated, user } = useAuthStore();
+  const loadFromServer = useCartStore((state) => state.loadFromServer);
+
+  useEffect(() => {
+    if (mounted) {
+      void loadFromServer();
+    }
+  }, [mounted, loadFromServer]);
+
+  const isAuthenticated = Boolean(user);
+  const userLabel = user?.name?.split(" ")?.[0] || user?.email || "Account";
   const totalItems = mounted ? getTotalItems() : 0;
 
   const categories = [
@@ -52,7 +72,7 @@ export default function Header() {
         }`}
       >
         {/* Top Promo Banner */}
-        {showBanner && (
+        {!isAiTrialRoute && showBanner && (
           <div className="relative overflow-hidden bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 text-white text-center py-2 text-xs sm:text-sm">
             {/* shimmer sweep */}
             <div className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
@@ -119,9 +139,9 @@ export default function Header() {
                 <span className="absolute bottom-1 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-violet-500 to-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
               </Link>
 
-              {/* AI Try-On pill */}
+              {/* AI Trial pill */}
               <Link
-                href="/virtual-tryon"
+                href="/ai-trial"
                 className="ml-3 flex items-center gap-1.5 px-4 py-1.5 rounded-full
                                     bg-gradient-to-r from-violet-600 to-blue-500 text-white text-sm font-semibold
                                     hover:from-violet-500 hover:to-blue-400
@@ -129,7 +149,7 @@ export default function Header() {
                                     transition-all duration-300 active:scale-95"
               >
                 <Zap className="w-3.5 h-3.5" />
-                AI Try-On
+                AI Trial
               </Link>
             </nav>
 
@@ -164,7 +184,7 @@ export default function Header() {
               >
                 <User className="w-4 h-4" />
                 <span className="hidden xl:inline text-sm">
-                  {isAuthenticated ? user?.name?.split(" ")[0] : "Login"}
+                  {isAuthenticated ? userLabel : authLoading ? "..." : "Login"}
                 </span>
               </Link>
 
@@ -244,13 +264,13 @@ export default function Header() {
             ))}
 
             <Link
-              href="/virtual-tryon"
+              href="/ai-trial"
               className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold
                                 bg-gradient-to-r from-violet-50 to-blue-50 text-violet-700
                                 hover:from-violet-100 hover:to-blue-100 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
-              <Zap className="w-4 h-4" /> AI Try-On
+              <Zap className="w-4 h-4" /> AI Trial
             </Link>
 
             <Link

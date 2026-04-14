@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/store/authStore';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { Bell, Lock, CreditCard, Globe } from 'lucide-react';
 
 export default function SettingsPage() {
     const router = useRouter();
-    const { isAuthenticated } = useAuthStore();
+    const { user, isLoading } = useUser();
+    const isAuthenticated = Boolean(user);
 
     const [settings, setSettings] = useState({
         emailNotifications: true,
@@ -19,10 +20,10 @@ export default function SettingsPage() {
     });
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!isLoading && !isAuthenticated) {
             router.push('/auth/login');
         }
-    }, [isAuthenticated, router]);
+    }, [isLoading, isAuthenticated, router]);
 
     if (!isAuthenticated) {
         return null;

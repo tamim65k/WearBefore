@@ -38,7 +38,7 @@ npm start
 - **Orders** (`/account/orders`) - Order history
 - **Wishlist** (`/account/wishlist`) - Saved items
 - **Settings** (`/account/settings`) - Account settings
-- **AI Virtual Try-On** (`/virtual-tryon`) - Upload & try products
+- **AI Trial** (`/ai-trial`) - Conversational AI stylist and product guidance
 
 ### Features Implemented
 ✅ Responsive navigation with mobile menu
@@ -75,7 +75,7 @@ npm start
 - `/products/watches` - Watches category
 - `/products/shirts` - Shirts category
 - `/products/pants` - Pants category
-- `/virtual-tryon` - AI Try-On feature
+- `/ai-trial` - AI Trial feature
 
 ### Shopping
 - `/cart` - Shopping cart
@@ -114,7 +114,7 @@ npm start
 - Access account features
 
 ### 5. Try AI Virtual Try-On
-- Go to `/virtual-tryon`
+- Go to `/ai-trial`
 - Upload a photo
 - Select a product
 - Click "Apply Virtual Try-On"

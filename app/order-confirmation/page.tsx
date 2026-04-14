@@ -1,8 +1,15 @@
 import Link from 'next/link';
 import { CheckCircle, Package } from 'lucide-react';
 
-export default function OrderConfirmationPage() {
-    const orderId = `WB-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+interface OrderConfirmationPageProps {
+    searchParams: Promise<{
+        orderId?: string;
+    }>;
+}
+
+export default async function OrderConfirmationPage({ searchParams }: OrderConfirmationPageProps) {
+    const { orderId } = await searchParams;
+    const resolvedOrderId = orderId || 'WB-PENDING';
 
     return (
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
@@ -17,7 +24,7 @@ export default function OrderConfirmationPage() {
                     <Package className="w-5 h-5 text-gray-600" />
                     <span className="text-sm text-gray-600">Order Number</span>
                 </div>
-                <p className="text-2xl font-bold">{orderId}</p>
+                <p className="text-2xl font-bold">{resolvedOrderId}</p>
             </div>
 
             <p className="text-gray-600 mb-8">

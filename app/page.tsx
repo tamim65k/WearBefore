@@ -31,7 +31,7 @@ export default async function Home() {
                 <Sparkles className="w-3 h-3 text-yellow-400" />
                 Now with AI Virtual Try-On
               </div>
-              <h1 className="text-4xl lg:text-5xl font-black mb-4 leading-[1.1] tracking-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-4 leading-[1.1] tracking-tight">
                 Fashion Forward,
                 <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-blue-400">
@@ -57,7 +57,7 @@ export default async function Home() {
                 </Link>
               </div>
             </div>
-            <div className="relative h-72 lg:h-[420px] rounded-2xl overflow-hidden ring-1 ring-white/10">
+            <div className="relative h-64 sm:h-72 lg:h-[420px] rounded-2xl overflow-hidden ring-1 ring-white/10">
               <Image
                 src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200"
                 alt="Fashion Hero"

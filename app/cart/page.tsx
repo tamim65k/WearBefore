@@ -11,7 +11,7 @@ export default function CartPage() {
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <h1 className="text-3xl font-bold mb-8">Shopping Cart</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold mb-8">Shopping Cart</h1>
 
             {items.length === 0 ? (
                 <div className="text-center py-16">
@@ -29,9 +29,9 @@ export default function CartPage() {
                         {items.map((item) => (
                             <div
                                 key={`${item.product.id}-${item.selectedSize}-${item.selectedColor}`}
-                                className="flex gap-4 bg-white p-4 rounded-lg shadow-sm"
+                                className="flex flex-col gap-4 bg-white p-4 rounded-lg shadow-sm sm:flex-row"
                             >
-                                <div className="relative w-32 h-32 flex-shrink-0">
+                                <div className="relative w-full aspect-square sm:w-32 sm:h-32 sm:flex-shrink-0">
                                     <Image
                                         src={item.product.images[0]}
                                         alt={item.product.name}
@@ -40,7 +40,7 @@ export default function CartPage() {
                                     />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <div className="flex items-start justify-between mb-2">
+                                    <div className="flex items-start justify-between gap-3 mb-2">
                                         <div>
                                             <Link
                                                 href={`/products/${item.product.id}`}
@@ -61,7 +61,7 @@ export default function CartPage() {
                                             <X className="w-5 h-5" />
                                         </button>
                                     </div>
-                                    <div className="flex items-center justify-between mt-4">
+                                    <div className="flex flex-wrap items-center justify-between gap-3 mt-4">
                                         <div className="flex items-center space-x-3">
                                             <button
                                                 onClick={() =>
@@ -102,7 +102,7 @@ export default function CartPage() {
 
                     {/* Order Summary */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white p-6 rounded-lg shadow-sm sticky top-24">
+                        <div className="bg-white p-6 rounded-lg shadow-sm lg:sticky lg:top-24">
                             <h2 className="text-xl font-bold mb-4">Order Summary</h2>
                             <div className="space-y-3 mb-4">
                                 <div className="flex items-center justify-between">

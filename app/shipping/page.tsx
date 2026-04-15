@@ -3,9 +3,9 @@ import { Package, Truck, Clock, Globe } from 'lucide-react';
 export default function ShippingPage() {
     return (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="text-4xl font-bold mb-8">Shipping Information</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-8">Shipping Information</h1>
 
-            <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
+            <div className="bg-white rounded-lg shadow-sm p-5 sm:p-8 mb-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <div className="flex items-start space-x-4">
                         <div className="bg-blue-100 p-3 rounded-full">

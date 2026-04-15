@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCatalogProducts } from "@/lib/catalog";
 
 type ConversationRole = "user" | "assistant";
+type LanguagePreference = "en" | "bn";
 
 interface ConversationMessage {
   role: ConversationRole;
@@ -19,6 +20,7 @@ interface AiTrialRequest {
   messages?: ConversationMessage[];
   selectedProductIds?: string[];
   profile?: StyleProfile;
+  language?: LanguagePreference;
 }
 
 interface GeminiResponse {
@@ -114,6 +116,10 @@ function normalizeProfile(input: unknown): StyleProfile {
   };
 }
 
+function normalizeLanguage(input: unknown): LanguagePreference {
+  return input === "bn" ? "bn" : "en";
+}
+
 function buildCatalogContext(
   selectedProductIds: string[],
   allProducts: Array<{
@@ -193,6 +199,7 @@ export async function POST(request: NextRequest) {
     requestBody.selectedProductIds,
   );
   const profile = normalizeProfile(requestBody.profile);
+  const language = normalizeLanguage(requestBody.language);
   const catalogProducts = await getCatalogProducts();
 
   if (messages.length === 0) {
@@ -209,9 +216,18 @@ export async function POST(request: NextRequest) {
     "If details are uncertain, say so clearly instead of making up facts.",
     "Only recommend products from the provided product name list.",
     "When recommending products, mention product names exactly as provided in context and never invent product names.",
+    language === "bn"
+      ? "Reply in Bangla (Bengali) for all explanation text."
+      : "Reply in English for all explanation text.",
+    "Always keep product names in English exactly as provided. Never translate product names.",
   ].join(" ");
 
   const contextualMessage = [
+    `Preferred response language: ${
+      language === "bn" ? "Bangla (Bengali)" : "English"
+    }`,
+    "Important: Keep every product name in English.",
+    "",
     "Shopper context:",
     buildProfileContext(profile),
     "",

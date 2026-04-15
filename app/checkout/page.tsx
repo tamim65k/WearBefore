@@ -105,14 +105,14 @@ export default function CheckoutPage() {
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold mb-8">Checkout</h1>
 
             <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Checkout Form */}
                     <div className="lg:col-span-2 space-y-6">
                         {/* Contact Information */}
-                        <div className="bg-white p-6 rounded-lg shadow-sm">
+                        <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm">
                             <h2 className="text-xl font-bold mb-4">Contact Information</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
@@ -152,7 +152,7 @@ export default function CheckoutPage() {
                         </div>
 
                         {/* Shipping Address */}
-                        <div className="bg-white p-6 rounded-lg shadow-sm">
+                        <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm">
                             <h2 className="text-xl font-bold mb-4">Shipping Address</h2>
                             <div className="space-y-4">
                                 <div>
@@ -166,7 +166,7 @@ export default function CheckoutPage() {
                                         className="input-field"
                                     />
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium mb-2">City *</label>
                                         <input
@@ -190,7 +190,7 @@ export default function CheckoutPage() {
                                         />
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium mb-2">ZIP Code *</label>
                                         <input
@@ -215,7 +215,7 @@ export default function CheckoutPage() {
                         </div>
 
                         {/* Payment Information */}
-                        <div className="bg-white p-6 rounded-lg shadow-sm">
+                        <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm">
                             <h2 className="text-xl font-bold mb-4 flex items-center space-x-2">
                                 <CreditCard className="w-5 h-5" />
                                 <span>Payment Information</span>
@@ -244,7 +244,7 @@ export default function CheckoutPage() {
                                         className="input-field"
                                     />
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium mb-2">Expiry Date *</label>
                                         <input
@@ -271,7 +271,7 @@ export default function CheckoutPage() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-4 flex items-center space-x-2 text-sm text-gray-600">
+                            <div className="mt-4 flex items-start space-x-2 text-sm text-gray-600">
                                 <Lock className="w-4 h-4" />
                                 <span>Your payment information is secure and encrypted</span>
                             </div>
@@ -280,15 +280,15 @@ export default function CheckoutPage() {
 
                     {/* Order Summary */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white p-6 rounded-lg shadow-sm sticky top-24">
+                        <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm lg:sticky lg:top-24">
                             <h2 className="text-xl font-bold mb-4">Order Summary</h2>
                             <div className="space-y-3 mb-4 max-h-64 overflow-y-auto">
                                 {items.map((item) => (
                                     <div
                                         key={`${item.product.id}-${item.selectedSize}-${item.selectedColor}`}
-                                        className="flex gap-3"
+                                        className="flex gap-2 sm:gap-3"
                                     >
-                                        <div className="relative w-16 h-16 flex-shrink-0">
+                                        <div className="relative w-14 h-14 flex-shrink-0 sm:w-16 sm:h-16">
                                             <Image
                                                 src={item.product.images[0]}
                                                 alt={item.product.name}

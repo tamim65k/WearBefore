@@ -117,7 +117,7 @@ export default function ProductDetailPage() {
               )}
             </div>
             {product.images.length > 1 && (
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                 {product.images.map((image, index) => (
                   <button
                     key={index}
@@ -180,7 +180,7 @@ export default function ProductDetailPage() {
                   ))}
                 </div>
                 <span className="text-xs text-gray-500">
-                  {product.rating} · {product.reviews} reviews
+                  {product.rating} -+ {product.reviews} reviews
                 </span>
               </div>
             )}
@@ -261,7 +261,7 @@ export default function ProductDetailPage() {
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="w-9 h-9 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors text-lg leading-none"
                 >
-                  −
+                  G��
                 </button>
                 <span className="w-10 text-center text-sm font-semibold">
                   {quantity}
@@ -328,3 +328,4 @@ export default function ProductDetailPage() {
     </div>
   );
 }
+

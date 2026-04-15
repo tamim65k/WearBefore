@@ -146,12 +146,12 @@ function ProductsContent() {
           </div>
         </div>
 
-        <div className="flex gap-8">
+        <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
           {/* Filters Sidebar */}
           <aside
-            className={`shrink-0 w-56 lg:block ${showFilters ? "block" : "hidden"}`}
+            className={`shrink-0 w-full lg:w-56 lg:block ${showFilters ? "block" : "hidden"}`}
           >
-            <div className="bg-white rounded-2xl border border-gray-100 p-5 sticky top-24">
+            <div className="bg-white rounded-2xl border border-gray-100 p-5 lg:sticky lg:top-24">
               <div className="flex items-center justify-between mb-5">
                 <h3 className="font-semibold text-sm">Filters</h3>
                 <button

@@ -16,7 +16,7 @@ export default function SiteShell({ children }: SiteShellProps) {
   return (
     <>
       <Header />
-      <main className={isAiTrialPage ? "h-[calc(100dvh-4rem)]" : "min-h-screen"}>
+      <main className={isAiTrialPage ? "h-[calc(100dvh-4rem)] overflow-hidden" : "min-h-screen"}>
         {children}
       </main>
       {!isAiTrialPage && <Footer />}

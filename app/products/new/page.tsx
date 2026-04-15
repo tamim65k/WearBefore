@@ -39,7 +39,7 @@ export default function NewArrivalsPage() {
             <Sparkles className="w-3.5 h-3.5" />
             Just Dropped
           </p>
-          <h1 className="text-4xl lg:text-5xl font-black tracking-tight leading-[1.1] mb-4 text-gray-900">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1] mb-4 text-gray-900">
             New{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-indigo-600">
               Arrivals

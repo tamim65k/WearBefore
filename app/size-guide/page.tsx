@@ -1,14 +1,14 @@
 export default function SizeGuidePage() {
     return (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="text-4xl font-bold mb-8 text-center">Size Guide</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-8 text-center">Size Guide</h1>
 
             <div className="space-y-12">
                 {/* Shirts Size Guide */}
-                <div className="bg-white rounded-lg shadow-sm p-8">
+                <div className="bg-white rounded-lg shadow-sm p-5 sm:p-8">
                     <h2 className="text-2xl font-bold mb-6">Shirts & Tops</h2>
                     <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
+                        <table className="w-full min-w-[560px] text-sm">
                             <thead className="bg-gray-50">
                                 <tr>
                                     <th className="px-4 py-3 text-left font-semibold">Size</th>
@@ -60,10 +60,10 @@ export default function SizeGuidePage() {
                 </div>
 
                 {/* Pants Size Guide */}
-                <div className="bg-white rounded-lg shadow-sm p-8">
+                <div className="bg-white rounded-lg shadow-sm p-5 sm:p-8">
                     <h2 className="text-2xl font-bold mb-6">Pants & Jeans</h2>
                     <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
+                        <table className="w-full min-w-[560px] text-sm">
                             <thead className="bg-gray-50">
                                 <tr>
                                     <th className="px-4 py-3 text-left font-semibold">Waist Size</th>
@@ -115,10 +115,10 @@ export default function SizeGuidePage() {
                 </div>
 
                 {/* Shoes Size Guide */}
-                <div className="bg-white rounded-lg shadow-sm p-8">
+                <div className="bg-white rounded-lg shadow-sm p-5 sm:p-8">
                     <h2 className="text-2xl font-bold mb-6">Sneakers & Shoes</h2>
                     <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
+                        <table className="w-full min-w-[560px] text-sm">
                             <thead className="bg-gray-50">
                                 <tr>
                                     <th className="px-4 py-3 text-left font-semibold">US Size</th>
@@ -170,7 +170,7 @@ export default function SizeGuidePage() {
                 </div>
 
                 {/* How to Measure */}
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-8">
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-5 sm:p-8">
                     <h2 className="text-2xl font-bold mb-6">How to Measure</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>

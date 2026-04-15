@@ -3,9 +3,9 @@ import { RefreshCw, Package, Clock } from 'lucide-react';
 export default function ReturnsPage() {
     return (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="text-4xl font-bold mb-8">Returns & Exchanges</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-8">Returns & Exchanges</h1>
 
-            <div className="bg-white rounded-lg shadow-sm p-8 space-y-8">
+            <div className="bg-white rounded-lg shadow-sm p-5 sm:p-8 space-y-8">
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                     <h2 className="text-xl font-bold mb-2 text-blue-900">30-Day Return Policy</h2>
                     <p className="text-blue-800">

@@ -71,7 +71,7 @@ export default function FAQPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4">Frequently Asked Questions</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-4">Frequently Asked Questions</h1>
         <p className="text-gray-600 text-lg">
           Find answers to common questions about WereBefore
         </p>
@@ -82,7 +82,7 @@ export default function FAQPage() {
           <div key={index} className="border-b last:border-b-0">
             <button
               onClick={() => setOpenIndex(openIndex === index ? null : index)}
-              className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+              className="w-full px-4 sm:px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
             >
               <span className="font-semibold text-left">{faq.question}</span>
               {openIndex === index ? (
@@ -92,7 +92,7 @@ export default function FAQPage() {
               )}
             </button>
             {openIndex === index && (
-              <div className="px-6 pb-4 text-gray-600">{faq.answer}</div>
+              <div className="px-4 sm:px-6 pb-4 text-gray-600">{faq.answer}</div>
             )}
           </div>
         ))}

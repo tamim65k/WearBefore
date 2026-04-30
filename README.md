@@ -20,22 +20,21 @@
 ### 🛒 **Complete E-Commerce Experience**
 - **Product Catalog**: Browse sneakers, watches, shirts, pants, and accessories
 - **Advanced Search & Filters**: Filter by category, price range, and sort options
-- **Shopping Cart**: Real-time cart updates with persistent storage
+- **Shopping Cart**: Real-time cart updates with local + server persistence (when logged in)
 - **Checkout System**: Complete checkout flow with shipping and payment forms
-- **Order Management**: Order confirmation and tracking system
+- **Order Management**: Checkout creates orders and account history (Neon-backed)
 
-### 🤖 **AI Virtual Try-On**
-- Upload your photo and visualize how products look on you
-- Real-time AI processing simulation
-- Product overlay and result sharing
-- Enhanced shopping experience
+### 🤖 **AI Trial (Gemini Stylist)**
+- Conversational stylist that builds looks from the live catalog
+- Product-aware suggestions with direct product links
+- Bilingual responses (English/Bangla)
+- Requires a Gemini API key for live responses
 
 ### 👤 **User Management**
-- User registration and authentication system
+- Auth0-powered login and signup flow
 - Personal account dashboard
 - Order history tracking
-- Wishlist functionality
-- Profile management
+- Wishlist and profile management
 
 ### 📱 **Modern Design**
 - Fully responsive across all devices
@@ -57,6 +56,9 @@
 - **Language**: [TypeScript 5.7](https://www.typescriptlang.org/)
 - **Styling**: [Tailwind CSS 3.4](https://tailwindcss.com/)
 - **State Management**: [Zustand](https://zustand-demo.pmnd.rs/) with persistence
+- **Authentication**: [Auth0](https://auth0.com/) (Next.js SDK)
+- **Database**: [Neon Postgres](https://neon.tech/) (optional persistence)
+- **AI**: Google Gemini API (optional, for AI Trial)
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **Image Optimization**: Next.js Image component
 - **Deployment**: [Vercel](https://vercel.com) ready
@@ -79,11 +81,14 @@ cd WearBefore
 # Install dependencies
 npm install
 
+# Optional: enable Auth0 + AI Trial + Neon persistence
+# Copy .env.example to .env.local and fill values
+
 # Start development server
 npm run dev
 
 # Open browser
-open http://localhost:3000
+# http://localhost:3000
 ```
 
 ### Build for Production
@@ -115,6 +120,8 @@ WearBefore/
 │   ├── 📂 cart/             # Cart-related components
 │   └── 📂 products/         # Product components
 ├── 📂 data/                  # Static data and mock data
+├── 📂 db/                    # Database schema
+├── 📂 lib/                   # Auth + catalog + database helpers
 ├── 📂 store/                 # Zustand state management
 ├── 📂 types/                 # TypeScript type definitions
 ├── 📂 public/               # Static assets
@@ -143,9 +150,27 @@ Meet our development team from **Dhaka International University (DIU)**:
 
 ### Environment Variables
 ```bash
-# No environment variables required for demo
-# All features work with static data
+# Optional but recommended for full functionality
+# Copy .env.example to .env.local and fill values
+
+# Gemini API configuration for AI Trial
+GEMINI_API_KEY=
+GEMINI_MODEL=
+AI_TRIAL_MAX_HISTORY=
+
+# Auth0 configuration
+AUTH0_SECRET=
+AUTH0_DOMAIN=
+APP_BASE_URL=
+AUTH0_CLIENT_ID=
+AUTH0_CLIENT_SECRET=
+
+# Neon database
+DATABASE_URL=
 ```
+
+Without these values, the UI still runs with static product data and local cart
+persistence, but AI Trial responses and authenticated server persistence are disabled.
 
 ### Image Domains
 Configure external image sources in `next.config.ts`:
@@ -210,19 +235,21 @@ Edit `data/products.ts` to add new products:
 - **Component Styles**: Tailwind utility classes
 
 ### API Integration
-To connect to a real backend:
-1. Update store files (`store/cartStore.ts`, `store/authStore.ts`)
-2. Replace demo functions with actual API calls
-3. Add environment variables in `.env.local`
+This project already ships with Next.js route handlers:
+- `GET /api/products` (search/category/featured/new filters)
+- `GET /api/products/[id]`
+- `GET|PUT /api/cart` (Auth0 + Neon persistence)
+- `GET|POST /api/orders`
+- `POST /api/ai-trial` (Gemini-powered stylist)
+
+Catalog data falls back to `data/products.ts` and `data/newArrivals.ts` when the
+database is not configured. See `db/schema.sql` for the Neon schema.
 
 ## 🔄 Development Workflow
 
 ```bash
 # Start development
 npm run dev
-
-# Type checking
-npm run type-check
 
 # Linting
 npm run lint
@@ -242,13 +269,12 @@ npm start
 
 ## 📋 Roadmap
 
-- [ ] **Backend Integration** with REST API
 - [ ] **Payment Gateway** integration (Stripe/PayPal)
-- [ ] **Real AI Try-On** with ML models
+- [ ] **Image-based AI Try-On** with ML models
 - [ ] **User Reviews & Ratings** system
 - [ ] **Admin Dashboard** for product management
 - [ ] **Email Notifications** for orders
-- [ ] **Multi-language Support**
+- [ ] **Expanded i18n + content management**
 - [ ] **Social Media Integration**
 
 ## 🐛 Known Issues
@@ -297,249 +323,3 @@ Made with ❤️ by [Team WearBefore](https://github.com/tamim65k/WearBefore)
 [🔝 Back to Top](#wearbefore---fashion-e-commerce-platform-)
 
 </div>
-
-## Features
-
-### 🛍️ E-Commerce Core
-- **Product Catalog**: Browse sneakers, watches, shirts, pants, and accessories
-- **Advanced Search & Filters**: Category, price range, and sorting options
-- **Product Details**: High-quality images, size/color selection, reviews
-- **Shopping Cart**: Real-time cart updates with persistent storage
-- **Checkout Flow**: Complete checkout with shipping and payment forms
-- **Order Management**: Order confirmation and tracking
-
-### 🤖 AI Virtual Try-On
-- Upload your photo and see how products look on you
-- Real-time AI processing simulation
-- Product overlay and visualization
-- Download and share results
-
-### 👤 User Management
-- User registration and login (demo authentication)
-- User profile and account management
-- Order history
-- Wishlist functionality
-
-### 📱 Responsive Design
-- Fully responsive across all devices
-- Mobile-first approach
-- Touch-friendly navigation
-- Optimized for tablets and desktops
-
-### 🎨 Modern UI/UX
-- Clean, professional design
-- Smooth animations and transitions
-- Intuitive navigation
-- Accessible components
-
-## Tech Stack
-
-- **Framework**: Next.js 15 with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **State Management**: Zustand with persistence
-- **Icons**: Lucide React
-- **Image Optimization**: Next.js Image component
-
-## Getting Started
-
-### Prerequisites
-- Node.js 18+ installed
-- npm or yarn package manager
-
-### Installation
-
-1. Clone or navigate to the project directory:
-```bash
-cd "c:\\Users\\mythz\\Desktop\\project werebefore"
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Run the development server:
-```bash
-npm run dev
-```
-
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-### Build for Production
-
-```bash
-npm run build
-npm start
-```
-
-## Deployment
-
-### Deploy to Vercel (Recommended)
-
-The easiest way to deploy is using [Vercel](https://vercel.com):
-
-#### Quick Deploy
-1. Push your code to GitHub
-2. Import your repository on [Vercel](https://vercel.com/new)
-3. Vercel will automatically detect Next.js and configure everything
-4. Click "Deploy"
-
-#### Using Vercel CLI
-```bash
-npm install -g vercel
-vercel
-```
-
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
-
-### Other Platforms
-- **Netlify**: Supports Next.js with automatic configuration
-- **AWS Amplify**: Full Next.js support with SSR
-- **Docker**: Can be containerized for any platform
-
-## Project Structure
-
-```
-project werebefore/
-├── app/                          # Next.js app router pages
-│   ├── account/                 # User account pages
-│   ├── auth/                    # Authentication pages
-│   │   ├── login/
-│   │   └── register/
-│   ├── cart/                    # Shopping cart page
-│   ├── checkout/                # Checkout flow
-│   ├── products/                # Product catalog
-│   │   ├── [category]/         # Category pages
-│   │   └── [id]/               # Product detail pages
-│   ├── ai-trial/               # Conversational AI trial
-│   ├── order-confirmation/     # Order success page
-│   ├── layout.tsx              # Root layout
-│   ├── page.tsx                # Homepage
-│   └── globals.css             # Global styles
-├── components/                  # React components
-│   ├── layout/                 # Layout components
-│   │   ├── Header.tsx
-│   │   └── Footer.tsx
-│   ├── cart/                   # Cart components
-│   │   └── CartSidebar.tsx
-│   └── products/               # Product components
-│       └── ProductCard.tsx
-├── data/                        # Static data
-│   └── products.ts             # Product catalog
-├── store/                       # State management
-│   ├── cartStore.ts            # Shopping cart store
-│   └── authStore.ts            # Authentication store
-├── types/                       # TypeScript types
-│   └── index.ts
-├── public/                      # Static assets
-├── next.config.ts              # Next.js configuration
-├── tailwind.config.ts          # Tailwind configuration
-├── tsconfig.json               # TypeScript configuration
-└── package.json                # Dependencies
-
-```
-
-## Key Features Implementation
-
-### Shopping Cart
-- Persistent cart using Zustand with localStorage
-- Add/remove items with size and color variants
-- Quantity management
-- Real-time price calculations
-
-### Product Catalog
-- 20+ demo products with real images from Unsplash
-- Multiple categories
-- Filtering and sorting
-- Search functionality
-
-### Virtual Try-On
-- Image upload interface
-- Product selection grid
-- Simulated AI processing
-- Result preview and sharing
-
-### Authentication
-- Login and registration forms
-- Demo authentication (no backend required)
-- Protected routes
-- User profile management
-
-## Demo Data
-
-The application includes demo products for:
-- Sneakers (4 products)
-- Watches (4 products)
-- Shirts (4 products)
-- Pants (4 products)
-- Accessories (2 products)
-
-All product images are sourced from Unsplash for demonstration purposes.
-
-## Customization
-
-### Adding Products
-Edit `data/products.ts` to add new products:
-
-```typescript
-{
-  id: 'unique-id',
-  name: 'Product Name',
-  description: 'Product description',
-  price: 99.99,
-  category: 'sneakers',
-  images: ['image-url'],
-  sizes: ['S', 'M', 'L'],
-  colors: ['Black', 'White'],
-  inStock: true,
-}
-```
-
-### Styling
-- Global styles: `app/globals.css`
-- Tailwind config: `tailwind.config.ts`
-- Component-level styles use Tailwind utility classes
-
-### API Integration
-To connect to a real backend:
-1. Update store files (`store/cartStore.ts`, `store/authStore.ts`)
-2. Replace demo functions with actual API calls
-3. Add environment variables in `.env.local`
-
-## Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-
-## Performance
-
-- Optimized images with Next.js Image component
-- Code splitting and lazy loading
-- Efficient state management
-- Fast page transitions
-
-## Future Enhancements
-
-- Backend API integration
-- Real payment processing
-- Advanced AI try-on with actual ML models
-- Product reviews and ratings system
-- Admin dashboard for product management
-- Email notifications
-- Social media integration
-- Multi-language support
-
-## License
-
-This project is for demonstration purposes.
-
-## Support
-
-For questions or issues, please refer to the [Next.js documentation](https://nextjs.org/docs).
-
----
-
-Built with ❤️ using Next.js and TypeScript
